@@ -92,7 +92,7 @@ const Journey = ({token, setToken}: JourneyProps) => {
                           <p key={collaborator}>{collaborator}</p>
                         ))}
                     </td>
-                    <td className="border px-4 py-2 text-center">{moment(journey.start_date).format('DD/MM/YYYY HH:mm:ss')}</td>
+                    <td className="border px-4 py-2 text-center">{journey.start_date}</td>
                     </tr>
                 ))}
                 </tbody>

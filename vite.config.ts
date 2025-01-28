@@ -10,6 +10,9 @@ export default defineConfig({
   build: {
     sourcemap: false,
   },
+  server: {
+    middlewareMode: true,
+  },
   envPrefix: 'VITE_',
   define: {
     'process.env': {
