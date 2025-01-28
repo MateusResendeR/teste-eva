@@ -72,6 +72,7 @@ const Journey = () => {
                 <thead className="bg-gray-100">
                 <tr>
                     <th className="px-4 py-2">Nome</th>
+                    <th className="px-4 py-2">Status</th>
                     <th className="px-4 py-2">ID - Ação</th>
                     <th className="px-4 py-2">ID - Colaborador</th>
                     <th className="px-4 py-2">Data de envio</th>
@@ -81,6 +82,7 @@ const Journey = () => {
                 {journeys.length > 0 && journeys.map((journey) => (
                     <tr key={journey.id}>
                     <td className="border px-4 py-2 text-center">{journey.name}</td>
+                    <td className="border px-4 py-2 text-center">{journey.status}</td>
                     <td className="border px-4 py-2 text-center">
                         { journey.actions.map((action: any) => (
                           <p key={action}>{action}</p>
