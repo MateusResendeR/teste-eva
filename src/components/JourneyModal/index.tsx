@@ -78,7 +78,12 @@ const JourneyModal = ({setOpen, setUpdateList, token, setToken}: JourneyModalPro
       if (!tokenLoaded) {
         return;
       }
-      apiLogged.get('/collaborators').then((response) => {
+      apiLogged.get('/collaborators',{
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }).then((response) => {
         const collaborators = response.data;
         if (Array.isArray(collaborators.collaborators)) {
           setCollaboratorsOpts(collaborators.collaborators);
@@ -87,19 +92,26 @@ const JourneyModal = ({setOpen, setUpdateList, token, setToken}: JourneyModalPro
       }).catch((error) => {
         console.error(error);
       });
-      }, [tokenLoaded]);
+      }, [tokenLoaded, token, setToken]);
 
       useEffect(() => {
-        apiLogged.get('/actions').then((response) => {
-            const actions = response.data;
-            if (Array.isArray(actions.actions)) {
-              setActionsOpts(actions.actions);
-              setActions(actions.actions[0].id);
+        if (tokenLoaded) {
+          apiLogged.get('/actions',{
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
             }
-          }).catch((error) => {
-            console.error(error);
-          });
-      }, []);
+          }).then((response) => {
+              const actions = response.data;
+              if (Array.isArray(actions.actions)) {
+                setActionsOpts(actions.actions);
+                setActions(actions.actions[0].id);
+              }
+            }).catch((error) => {
+              console.error(error);
+            });
+        }
+      }, [tokenLoaded, token, setToken]);
 
     return (
         <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-75 flex justify-center items-center">
