@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 
-function Home() {
+interface LoginProps {
+  setToken: (token: string) => void
+  token: string
+}
+function Home({token, setToken}: LoginProps) {
   const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [token, setToken] = useState('');
   const navigate = useNavigate();
 
   async function postLogin() {

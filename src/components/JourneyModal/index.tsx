@@ -4,8 +4,10 @@ import Toast from '../Toast';
 import Joi from 'joi';
 
 interface JourneyModalProps {
-    setOpen: (o: boolean) => void
-    setUpdateList: (o: boolean) => void
+    setOpen: (o: boolean) => void;
+    setUpdateList: (o: boolean) => void;
+    token: string;
+    setToken: (token: string) => void;
 }
 
 const schema = Joi.object({
@@ -15,7 +17,7 @@ const schema = Joi.object({
   collaborators: Joi.string().required()
 });
 
-const JourneyModal = ({setOpen, setUpdateList}: JourneyModalProps) => {
+const JourneyModal = ({setOpen, setUpdateList, token, setToken}: JourneyModalProps) => {
     const [name, setName] = useState('');
     const [actions, setActions] = useState('');
     const [actionsOpts, setActionsOpts] = useState<Array<any>>([]);
@@ -42,7 +44,13 @@ const JourneyModal = ({setOpen, setUpdateList}: JourneyModalProps) => {
             actions: [actions],
             collaborators: [collaborators],
             start_date: date
-          }).then(() => {
+          }, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+          ).then(() => {
               setShowToast(true);
               setMessage("Jornada criada com sucesso!");
               setType('success');
@@ -60,11 +68,10 @@ const JourneyModal = ({setOpen, setUpdateList}: JourneyModalProps) => {
     };
 
     useEffect(() => {
-      const token = localStorage.getItem('token');
-      if (token) {
+      if (token != "") {
         setTokenLoaded(true);
       }
-    }, []);
+    }, [token, setToken]);
     
 
     useEffect(() => {

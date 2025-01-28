@@ -6,36 +6,42 @@ import Header from '../../components/Header';
 import moment from 'moment';
 import {jwtDecode} from 'jwt-decode';
 
-const Journey = () => {
+interface JourneyProps {
+  token: string
+  setToken: (token: string) => void
+}
+const Journey = ({token, setToken}: JourneyProps) => {
     const [journeys, setJourneys] = useState<any[]>([]);
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const navigate = useNavigate();
-    const [token, setToken] = useState(localStorage.getItem('token'));
-    const [tokenLoaded, setTokenLoaded] = useState(false);
     const [updateList, setUpdateList] = useState(false);
   
     useEffect(() => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        setToken(token);
-        setTokenLoaded(true);
+      if (token != "") {
+        getJourneys();
       }
-    }, []);
+    }, [token,setToken]);
   
     useEffect(() => {
-      if (!token) {
+      if (token === "") {
         navigate('/', { replace: true });
+      } else {
+        const decodedToken = jwtDecode(token ?? '') as {email: string, name: string};
+        setEmail(decodedToken.email);
+        setName(decodedToken.name);
       }
-      const decodedToken = jwtDecode(token ?? '') as {email: string, name: string};
-      setEmail(decodedToken.email);
-      setName(decodedToken.name);
-    }, [tokenLoaded]);
+    }, [token, setToken]);
 
     async function getJourneys() {
       try {
-        apiLogged.get('/journeys').then((response) => {
+        apiLogged.get('/journeys',{
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }).then((response) => {
           setJourneys(response.data.journeys);
         });
       } catch (error) {
@@ -49,13 +55,6 @@ const Journey = () => {
         getJourneys();
       }
     }, [updateList]);
-
-    useEffect(() => {
-      if (!tokenLoaded) {
-        return;
-      }
-      getJourneys();
-    }, [tokenLoaded]);
 
     return (
       <>
@@ -102,7 +101,7 @@ const Journey = () => {
 
           </div>
           {modalOpen && (
-            <JourneyModal setUpdateList={setUpdateList} setOpen={setModalOpen} />
+            <JourneyModal setUpdateList={setUpdateList} setOpen={setModalOpen} token={token} setToken={setToken} />
           )}
         </div>
       </>
