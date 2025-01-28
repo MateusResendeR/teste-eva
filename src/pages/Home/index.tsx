@@ -28,9 +28,6 @@ function Home({token, setToken}: LoginProps) {
   useEffect(() => {
     if (token) {
       localStorage.setItem('token', token);
-      if (token != "") {
-        navigate('/journey');
-      }
     }
   }, [token]);
 

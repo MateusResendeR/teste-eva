@@ -4,6 +4,7 @@ import apiLogged from '../../services/apiLooged';
 import JourneyModal from '../../components/JourneyModal';
 import Header from '../../components/Header';
 import {jwtDecode} from 'jwt-decode';
+import moment from 'moment';
 
 interface JourneyProps {
   token: string
@@ -94,7 +95,7 @@ const Journey = ({token, setToken}: JourneyProps) => {
                           <p key={collaborator}>{collaborator}</p>
                         ))}
                     </td>
-                    <td className="border px-4 py-2 text-center">{journey.start_date}</td>
+                    <td className="border px-4 py-2 text-center">{moment(journey.start_date).format('DD/MM/YYYY HH:mm:ss')}</td>
                     </tr>
                 ))}
                 </tbody>
