@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import apiLogged from '../../services/apiLooged';
 import JourneyModal from '../../components/JourneyModal';
 import Header from '../../components/Header';
-import moment from 'moment';
 import {jwtDecode} from 'jwt-decode';
 
 interface JourneyProps {
